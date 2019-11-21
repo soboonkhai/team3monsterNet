@@ -3,16 +3,16 @@ WORKDIR /app
 
 # copy csproj and restore as distinct layers
 COPY *.sln .
-COPY aspnetapp/*.csproj ./aspnetapp/
+COPY AspNetCoreWebService/*.csproj ./AspNetCoreWebService/
 RUN dotnet restore
 
 # copy everything else and build app
-COPY aspnetapp/. ./aspnetapp/
-WORKDIR /app/aspnetapp
+COPY AspNetCoreWebService/. ./AspNetCoreWebService/
+WORKDIR /app/AspNetCoreWebService/
 RUN dotnet publish -c Release -o out
 
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
 WORKDIR /app
-COPY --from=build /app/aspnetapp/out ./
-ENTRYPOINT ["dotnet", "aspnetapp.dll"]
+COPY --from=build /app/AspNetCoreWebService/out ./
+ENTRYPOINT ["dotnet", "AspNetCoreWebService.dll"]
